@@ -34,7 +34,7 @@ interface CarouselSlide {
 const CAROUSEL_SLIDES: CarouselSlide[] = [
   {
     id: 1,
-    image: '${import.meta.env.BASE_URL}/assets/carousel/slide1.jpg',
+    image: `${import.meta.env.BASE_URL}assets/carousel/slide1.jpg`,
     quote: '“Không có con đường nào trải đầy hoa hồng...”',
     subQuote: 'Muốn nhìn thấy cầu vồng rực rỡ, phải biết kiên trì vượt qua những cơn mưa.',
     badge: 'Bàn học bên cửa sổ • Ban đêm',
@@ -42,7 +42,7 @@ const CAROUSEL_SLIDES: CarouselSlide[] = [
   },
   {
     id: 2,
-    image: '${import.meta.env.BASE_URL}/assets/carousel/slide2.jpg',
+    image: `${import.meta.env.BASE_URL}assets/carousel/slide2.jpg`,
     quote: '“Học không chỉ để có điểm số cao...”',
     subQuote: 'Học là để tự tin bước ra thế giới, khám phá tri thức và làm chủ tương lai rộng lớn.',
     badge: 'Đỉnh núi lúc bình minh • Khát vọng',
@@ -50,7 +50,7 @@ const CAROUSEL_SLIDES: CarouselSlide[] = [
   },
   {
     id: 3,
-    image: '${import.meta.env.BASE_URL}/assets/carousel/slide3.jpg',
+    image: `${import.meta.env.BASE_URL}assets/carousel/slide3.jpg`,
     quote: '“Mỗi ngày đi học là một bước gần hơn đến ước mơ”',
     subQuote: 'Mái trường thân yêu ươm mầm tài năng và nhân cách.',
     badge: 'Sân trường rợp bóng cây xanh',
@@ -58,7 +58,7 @@ const CAROUSEL_SLIDES: CarouselSlide[] = [
   },
   {
     id: 4,
-    image: '${import.meta.env.BASE_URL}/assets/carousel/slide4.jpg',
+    image: `${import.meta.env.BASE_URL}assets/carousel/slide4.jpg`,
     quote: '“Học hôm nay để xây dựng tương lai ngày mai”',
     subQuote: 'Hành trang tri thức số vững chắc giúp thế hệ học sinh sẵn sàng hội nhập.',
     badge: 'Ba lô và sách trên núi bình minh',
@@ -66,7 +66,7 @@ const CAROUSEL_SLIDES: CarouselSlide[] = [
   },
   {
     id: 5,
-    image: '${import.meta.env.BASE_URL}/assets/carousel/slide5.jpg',
+    image: `${import.meta.env.BASE_URL}assets/carousel/slide5.jpg`,
     quote: '“Cố gắng hôm nay là thành công ngày mai”',
     subQuote: 'Từng trang vở nắn nót, từng bài tập chăm chỉ gom góp thành thành công bền vững.',
     badge: 'Quyển vở, cây bút và hoa trắng',
