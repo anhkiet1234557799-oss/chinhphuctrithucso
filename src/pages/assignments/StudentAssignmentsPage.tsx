@@ -75,7 +75,6 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
   const studentName = currentUser?.displayName ? currentUser.displayName.replace(/THCS Mỹ Hòa\s*[-–•]?\s*/gi, '').trim() : 'Học sinh';
   const studentClass = currentUser?.className || `Khối ${currentGrade}`;
 
- ```tsx
 // Filter assignments relevant for this student
 const filteredAssignments = assignments.filter((asg) => {
     // Chỉ hiển thị bài tập đã được giáo viên công bố
