@@ -62,8 +62,15 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'submitted' | 'graded'>('all');
-  const [subjectFilter, setSubjectFilter] = useState<string>('all');
+  const [subjectFilter, setSubjectFilter] = useState<string>(
+  currentSubject?.id || 'all'
+);
   const [reviewSubmission, setReviewSubmission] = useState<AssignmentSubmission | null>(null);
+  useEffect(() => {
+  if (currentSubject?.id) {
+    setSubjectFilter(currentSubject.id);
+  }
+}, [currentSubject?.id]);
 
   // Student info fallback
   const studentUid = currentUser?.uid || 'u-student-guest';
