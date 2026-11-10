@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   CheckSquare,
   Clock,
@@ -7,17 +8,24 @@ import {
   FileText,
   User,
   ArrowRight,
+  RotateCcw,
   BookOpen,
   Filter,
+  Search,
+  Sparkles,
+  HelpCircle,
   Send,
+  Save,
   Check,
-  Award
+  Award,
+  GraduationCap
 } from 'lucide-react';
 import {
   Assignment,
   AssignmentSubmission,
   AssignmentQuestion,
   GradeLevel,
+  SubjectId,
   SubjectMeta,
   UserAccount
 } from '../../types';
@@ -34,6 +42,7 @@ interface StudentAssignmentsPageProps {
   onOpenLogin: () => void;
   onOpenDrawer: () => void;
   onBackToHome?: () => void;
+  onSelectGrade?: (grade: GradeLevel) => void;
 }
 
 export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
@@ -45,7 +54,8 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
   onSubmitAssignment,
   onOpenLogin,
   onOpenDrawer,
-  onBackToHome
+  onBackToHome,
+  onSelectGrade
 }) => {
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
   const [activeQuestionIdx, setActiveQuestionIdx] = useState(0);
@@ -56,36 +66,78 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'submitted' | 'graded'>('all');
   const [subjectFilter, setSubjectFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [reviewSubmission, setReviewSubmission] = useState<AssignmentSubmission | null>(null);
-  useEffect(() => { 
-    if (currentSubject?.id) {
-    setSubjectFilter(currentSubject.id);
-}
-}, [currentSubject?.id]);
+
+  // Grade filter state (Mặc định chọn theo Khối của học sinh nếu đã đăng nhập, hoặc Khối đang duyệt)
+  const [selectedGrade, setSelectedGrade] = useState<GradeLevel | 'all'>(() => {
+    if (currentUser?.grade && [6, 7, 8, 9].includes(currentUser.grade)) {
+      return currentUser.grade;
+    }
+    return currentGrade || 6;
+  });
+
+  useEffect(() => {
+    if (currentUser?.grade && [6, 7, 8, 9].includes(currentUser.grade)) {
+      setSelectedGrade(currentUser.grade);
+    } else if (currentGrade) {
+      setSelectedGrade(currentGrade);
+    }
+  }, [currentUser?.grade, currentGrade]);
+
+  // Chuẩn hóa mã môn học tránh sai lệch viết tắt / tiếng Việt / tiếng Anh
+  const normalizeSubjectId = (id: string): string => {
+    if (!id) return '';
+    const s = id.toLowerCase().trim();
+    if (s === 'math' || s === 'toan-hoc' || s === 'toán') return 'toan';
+    if (s === 'english' || s === 'tienganh' || s === 'tiếng anh') return 'tieng-anh';
+    if (s === 'literature' || s === 'ngu-van' || s === 'ngữ văn') return 'van';
+    if (s === 'science' || s === 'khoa-hoc-tu-nhien' || s === 'khtn') return 'khtn';
+    if (s === 'history-geography' || s === 'su-dia' || s === 'lịch sử và địa lí') return 'lich-su-dia-ly';
+    if (s === 'civics' || s === 'giáo dục công dân') return 'gdcd';
+    if (s === 'informatics' || s === 'it' || s === 'tin học') return 'tin-hoc';
+    if (s === 'technology' || s === 'công nghệ') return 'cong-nghe';
+    if (s === 'music' || s === 'âm nhạc') return 'am-nhac';
+    if (s === 'art' || s === 'mĩ thuật' || s === 'mỹ thuật') return 'mi-thuat';
+    if (s === 'pe' || s === 'the-chat' || s === 'giáo dục thể chất') return 'giao-duc-the-chat';
+    if (s === 'experiential' || s === 'hoạt động trải nghiệm') return 'hoat-dong-trai-nghiem';
+    if (s === 'local' || s === 'giáo dục địa phương') return 'giao-duc-dia-phuong';
+    return s;
+  };
 
   // Student info fallback
   const studentUid = currentUser?.uid || 'u-student-guest';
   const studentName = currentUser?.displayName ? currentUser.displayName.replace(/THCS Mỹ Hòa\s*[-–•]?\s*/gi, '').trim() : 'Học sinh';
-  const studentClass = currentUser?.className || `Khối ${currentGrade}`;
-
+  const studentClass = currentUser?.className || `Khối ${selectedGrade === 'all' ? currentGrade : selectedGrade}`;
 
   // Filter assignments relevant for this student
   const filteredAssignments = assignments.filter((asg) => {
     if (asg.status !== 'published') return false;
 
-    if (Number(asg.grade) !== Number(currentGrade)) return false;
+    // 1. Lọc Khối: Nếu chọn cụ thể khối 6, 7, 8, 9 thì lọc đúng khối; nếu chọn 'all' thì hiển thị tất cả
+    if (selectedGrade !== 'all' && asg.grade !== Number(selectedGrade)) return false;
 
-    if (subjectFilter !== 'all' && asg.subjectId !== subjectFilter) {
-      return false;
+    // 2. Lọc Môn học: Chuẩn hóa mã môn để đối chiếu chính xác
+    if (subjectFilter !== 'all') {
+      const normAsgSub = normalizeSubjectId(asg.subjectId);
+      const normFilterSub = normalizeSubjectId(subjectFilter);
+      if (normAsgSub !== normFilterSub) return false;
     }
 
-    // Kiểm tra bài tập được giao riêng cho lớp
-    if (asg.targetAudience === 'specific_classes') {
-      if (!currentUser?.className) return false;
+    // 3. Tìm kiếm theo từ khóa (tên bài, mô tả, chủ đề hoặc tên môn)
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const titleMatch = (asg.title || '').toLowerCase().includes(q);
+      const descMatch = (asg.description || '').toLowerCase().includes(q);
+      const chapterMatch = (asg.chapter || '').toLowerCase().includes(q);
+      const subjectMeta = SUBJECTS.find((s) => s.id === asg.subjectId);
+      const subjectMatch = subjectMeta ? subjectMeta.name.toLowerCase().includes(q) : false;
+      if (!titleMatch && !descMatch && !chapterMatch && !subjectMatch) return false;
+    }
 
-      if (!asg.targetClasses?.includes(currentUser.className)) {
-        return false;
-      }
+    // 4. Đối tượng lớp giao bài (Nếu bài tập chỉ giao đích danh lớp học)
+    if (asg.targetAudience === 'specific_classes' && asg.targetClasses && asg.targetClasses.length > 0 && currentUser?.className) {
+      if (!asg.targetClasses.includes(currentUser.className)) return false;
     }
 
     const sub = submissions.find(
@@ -93,25 +145,11 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
     );
 
     if (statusFilter === 'pending' && sub) return false;
-
-    if (statusFilter === 'submitted' && (!sub || sub.status !== 'submitted')) {
-      return false;
-    }
-
-    if (statusFilter === 'graded' && (!sub || sub.status !== 'graded')) {
-      return false;
-    }
+    if (statusFilter === 'submitted' && (!sub || sub.status !== 'submitted')) return false;
+    if (statusFilter === 'graded' && (!sub || sub.status !== 'graded')) return false;
 
     return true;
   });
-
-    if (statusFilter === 'pending' && sub) return false;
-    if (statusFilter === 'submitted' && (!sub || sub.status !== 'submitted')) return false;
-    if (statusFilter === 'graded' && (!sub || sub.status !== 'graded')) return false;
-```tsx
-    return true;
-});
-```
 
   // Load draft answers from localStorage when starting an assignment
   const startAssignment = (asg: Assignment) => {
@@ -242,7 +280,7 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
       answers,
       questionScores,
       score: earnedScore,
-      maxScore: selectedAssignment.maxPoints,
+      maxScore: selectedAssignment.maxPoints ?? selectedAssignment.maxScore ?? 10,
       attemptCount: 1,
       ...(hasSubjective ? {} : { gradedBy: 'Hệ thống tự động chấm', gradedAt: new Date().toISOString() })
     };
@@ -305,7 +343,14 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
                 {selectedAssignment.title}
               </h2>
               <p className="text-xs text-slate-500 mt-1">
-                Giáo viên giao: <strong>{selectedAssignment.teacherName}</strong>
+                {selectedAssignment.isCustom && selectedAssignment.teacherName ? (
+                  <>Giáo viên giao: <strong className="text-slate-700">{selectedAssignment.teacherName}</strong></>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 text-slate-500 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    Hệ thống bài tập số chuẩn THCS Mỹ Hòa – GDPT 2018
+                  </span>
+                )}
               </p>
             </div>
           </div>
@@ -727,7 +772,7 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
               <h4 className="font-bold text-slate-800 text-sm">
                 Chi tiết câu trả lời của em:
               </h4>
-              {asg?.questions?.map((q, idx) => {
+              {asg?.questions.map((q, idx) => {
                 const ans = reviewSubmission.answers[q.id];
                 const score = reviewSubmission.questionScores?.[q.id];
                 return (
@@ -809,53 +854,115 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
             Danh sách bài tập và đề kiểm tra do các thầy cô bộ môn giao trực tuyến. Em có thể làm bài trực tiếp, xem điểm số tức thì và nhận lời nhận xét từ thầy cô.
           </p>
-          <div className="flex items-center gap-3 pt-2 text-xs text-blue-200">
+          <div className="flex items-center gap-3 pt-2 text-xs text-blue-200 flex-wrap">
             <span>Học sinh: <strong>{studentName}</strong> ({studentClass})</span>
             <span>•</span>
-            <span>Khối {currentGrade}</span>
+            <span>Đang xem: <strong className="text-amber-300 font-extrabold">{selectedGrade === 'all' ? 'Tất cả 4 khối (6, 7, 8, 9)' : `Khối ${selectedGrade}`}</strong></span>
           </div>
         </div>
       </div>
 
       {/* Filter and Subject Tabs */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-4 rounded-3xl border border-[#E2EAF5] shadow-2xs">
-        {/* Status Filter */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-          {[
-            { id: 'all', label: 'Tất cả bài tập' },
-            { id: 'pending', label: 'Chưa làm' },
-            { id: 'submitted', label: 'Đã nộp bài' },
-            { id: 'graded', label: 'Đã có điểm' }
-          ].map((st) => (
-            <button
-              key={st.id}
-              onClick={() => setStatusFilter(st.id as any)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
-                statusFilter === st.id
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              {st.label}
-            </button>
-          ))}
+      <div className="bg-white p-4 rounded-3xl border border-[#E2EAF5] shadow-2xs space-y-3.5">
+        {/* Row 1: Grade Selection Tabs */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+            <span className="text-xs font-bold text-slate-500 whitespace-nowrap flex items-center gap-1.5 mr-1">
+              <GraduationCap className="w-4 h-4 text-blue-600" />
+              Chọn Khối:
+            </span>
+            {[
+              { id: 6, label: 'Khối 6' },
+              { id: 7, label: 'Khối 7' },
+              { id: 8, label: 'Khối 8' },
+              { id: 9, label: 'Khối 9' },
+              { id: 'all', label: 'Tất cả 4 khối' }
+            ].map((gr) => (
+              <button
+                key={gr.id}
+                onClick={() => {
+                  setSelectedGrade(gr.id as any);
+                  if (typeof gr.id === 'number' && onSelectGrade) {
+                    onSelectGrade(gr.id as GradeLevel);
+                  }
+                }}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-black shrink-0 transition-all cursor-pointer ${
+                  selectedGrade === gr.id
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+                }`}
+              >
+                {gr.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="text-xs text-slate-500 shrink-0 font-medium">
+            Hiển thị <strong className="text-blue-600 font-extrabold">{filteredAssignments.length}</strong> bài tập {selectedGrade === 'all' ? '(toàn trường)' : `Khối ${selectedGrade}`}
+          </div>
         </div>
 
-        {/* Subject Filter Dropdown */}
-        <div className="flex items-center gap-2 shrink-0">
-          <Filter className="w-4 h-4 text-slate-400" />
-          <select
-            value={subjectFilter}
-            onChange={(e) => setSubjectFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 focus:outline-none focus:border-blue-500"
-          >
-            <option value="all">Tất cả môn học</option>
-            {SUBJECTS.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
+        {/* Row 2: Status, Search, and Subject Filter */}
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+          {/* Status Filter */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0">
+            {[
+              { id: 'all', label: 'Tất cả bài tập' },
+              { id: 'pending', label: 'Chưa làm' },
+              { id: 'submitted', label: 'Đã nộp bài' },
+              { id: 'graded', label: 'Đã có điểm' }
+            ].map((st) => (
+              <button
+                key={st.id}
+                onClick={() => setStatusFilter(st.id as any)}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
+                  statusFilter === st.id
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {st.label}
+              </button>
             ))}
-          </select>
+          </div>
+
+          {/* Search & Subject Filter Dropdown */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Tìm theo tên bài, chủ đề, môn..."
+                className="pl-9 pr-7 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 w-full sm:w-60"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold cursor-pointer"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Filter className="w-4 h-4 text-slate-400 shrink-0" />
+              <select
+                value={subjectFilter}
+                onChange={(e) => setSubjectFilter(e.target.value)}
+                className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 focus:outline-none focus:border-blue-500 w-full sm:w-auto cursor-pointer"
+              >
+                <option value="all">Tất cả môn học (13 môn)</option>
+                {SUBJECTS.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -880,9 +987,9 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
               >
                 <div>
                   {/* Card Header: Subject badge & Status */}
-                  <div className="flex items-center justify-between text-xs mb-2.5">
+                  <div className="flex items-center justify-between text-xs mb-2.5 flex-wrap gap-2">
                     <span className="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-100">
-                      {subjectMeta?.name || 'Tin học'} • Khối {asg.grade}
+                      {subjectMeta?.name || asg.subjectId} • Khối {asg.grade}
                     </span>
 
                     {isGraded ? (
@@ -916,8 +1023,17 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
                   {/* Metadata info */}
                   <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500">
                     <div className="flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-slate-400" />
-                      <span className="truncate">{asg.teacherName}</span>
+                      {asg.isCustom && asg.teacherName ? (
+                        <>
+                          <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span className="truncate">{asg.teacherName}</span>
+                        </>
+                      ) : (
+                        <>
+                          <BookOpen className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span className="truncate">{asg.chapter || (subjectMeta?.name || 'Chuẩn GDPT 2018')}</span>
+                        </>
+                      )}
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-slate-400" />
@@ -933,7 +1049,7 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
                     </div>
                     <div className="flex items-center gap-1.5">
                       <FileText className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{Array.isArray(asg.questions) ? asg.questions.length : 0} câu hỏi</span>
+                      <span>{asg.questions.length} câu hỏi (10 điểm)</span>
                     </div>
                   </div>
                 </div>
@@ -965,11 +1081,24 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
         <div className="bg-white rounded-3xl p-12 text-center border border-[#E2EAF5] shadow-xs space-y-3">
           <CheckSquare className="w-12 h-12 text-slate-300 mx-auto" />
           <h4 className="text-base font-bold text-slate-700">
-            Hiện không có bài tập nào cần làm
+            Không tìm thấy bài tập nào phù hợp với bộ lọc
           </h4>
           <p className="text-xs text-slate-400 max-w-md mx-auto">
-            Thầy cô chưa giao thêm bài tập mới cho môn học này hoặc em đã hoàn thành tất cả bài tập được giao.
+            Không có bài tập nào tương ứng với Khối {selectedGrade === 'all' ? '6–9' : selectedGrade}, môn học hoặc từ khóa tìm kiếm em đã nhập.
           </p>
+          {(statusFilter !== 'all' || subjectFilter !== 'all' || searchQuery || selectedGrade !== 'all') && (
+            <button
+              onClick={() => {
+                setStatusFilter('all');
+                setSubjectFilter('all');
+                setSearchQuery('');
+                setSelectedGrade('all');
+              }}
+              className="px-4 py-2 rounded-xl bg-blue-50 text-blue-600 font-bold text-xs hover:bg-blue-100 cursor-pointer transition-colors"
+            >
+              Đặt lại tất cả bộ lọc
+            </button>
+          )}
         </div>
       )}
     </div>
