@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import {
   CheckSquare,
   Clock,
@@ -8,14 +7,9 @@ import {
   FileText,
   User,
   ArrowRight,
-  RotateCcw,
   BookOpen,
   Filter,
-  Search,
-  Sparkles,
-  HelpCircle,
   Send,
-  Save,
   Check,
   Award
 } from 'lucide-react';
@@ -24,7 +18,6 @@ import {
   AssignmentSubmission,
   AssignmentQuestion,
   GradeLevel,
-  SubjectId,
   SubjectMeta,
   UserAccount
 } from '../../types';
@@ -75,27 +68,24 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
   const studentName = currentUser?.displayName ? currentUser.displayName.replace(/THCS Mỹ Hòa\s*[-–•]?\s*/gi, '').trim() : 'Học sinh';
   const studentClass = currentUser?.className || `Khối ${currentGrade}`;
 
-// Filter assignments relevant for this student
-const filteredAssignments = assignments.filter((asg) => {
-    // Chỉ hiển thị bài tập đã được giáo viên công bố
+
+  // Filter assignments relevant for this student
+  const filteredAssignments = assignments.filter((asg) => {
     if (asg.status !== 'published') return false;
 
-    // Lọc chính xác theo khối lớp đang chọn
     if (Number(asg.grade) !== Number(currentGrade)) return false;
 
-    // Lọc chính xác theo môn học đang chọn trên thanh điều hướng
-    if (
-      subjectFilter !== 'all' &&
-      asg.subjectId !== subjectFilter
-    ) return false;
+    if (subjectFilter !== 'all' && asg.subjectId !== subjectFilter) {
+      return false;
+    }
 
-    // Class target check
-    if (
-      asg.targetAudience === 'specific_classes' &&
-      asg.targetClasses &&
-      currentUser?.className
-    ) {
-      if (!asg.targetClasses.includes(currentUser.className)) return false;
+    // Kiểm tra bài tập được giao riêng cho lớp
+    if (asg.targetAudience === 'specific_classes') {
+      if (!currentUser?.className) return false;
+
+      if (!asg.targetClasses?.includes(currentUser.className)) {
+        return false;
+      }
     }
 
     const sub = submissions.find(
@@ -103,9 +93,22 @@ const filteredAssignments = assignments.filter((asg) => {
     );
 
     if (statusFilter === 'pending' && sub) return false;
+
+    if (statusFilter === 'submitted' && (!sub || sub.status !== 'submitted')) {
+      return false;
+    }
+
+    if (statusFilter === 'graded' && (!sub || sub.status !== 'graded')) {
+      return false;
+    }
+
+    return true;
+  });
+
+    if (statusFilter === 'pending' && sub) return false;
     if (statusFilter === 'submitted' && (!sub || sub.status !== 'submitted')) return false;
     if (statusFilter === 'graded' && (!sub || sub.status !== 'graded')) return false;
-
+```tsx
     return true;
 });
 ```
@@ -724,7 +727,7 @@ const filteredAssignments = assignments.filter((asg) => {
               <h4 className="font-bold text-slate-800 text-sm">
                 Chi tiết câu trả lời của em:
               </h4>
-              {asg?.questions.map((q, idx) => {
+              {asg?.questions?.map((q, idx) => {
                 const ans = reviewSubmission.answers[q.id];
                 const score = reviewSubmission.questionScores?.[q.id];
                 return (
@@ -930,7 +933,7 @@ const filteredAssignments = assignments.filter((asg) => {
                     </div>
                     <div className="flex items-center gap-1.5">
                       <FileText className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{asg.questions.length} câu hỏi</span>
+                      <span>{Array.isArray(asg.questions) ? asg.questions.length : 0} câu hỏi</span>
                     </div>
                   </div>
                 </div>
