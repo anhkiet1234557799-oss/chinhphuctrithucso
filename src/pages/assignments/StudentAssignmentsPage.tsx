@@ -75,10 +75,41 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
   const studentName = currentUser?.displayName ? currentUser.displayName.replace(/THCS Mỹ Hòa\s*[-–•]?\s*/gi, '').trim() : 'Học sinh';
   const studentClass = currentUser?.className || `Khối ${currentGrade}`;
 
-  // Filter assignments relevant for this student
-  const filteredAssignments = assignments.filter((asg) => {
+ ```tsx
+// Filter assignments relevant for this student
+const filteredAssignments = assignments.filter((asg) => {
+    // Chỉ hiển thị bài tập đã được giáo viên công bố
     if (asg.status !== 'published') return false;
-    if (asg.grade !== currentGrade && asg.grade !== currentUser?.grade) return false;
+
+    // Lọc chính xác theo khối lớp đang chọn
+    if (Number(asg.grade) !== Number(currentGrade)) return false;
+
+    // Lọc chính xác theo môn học đang chọn trên thanh điều hướng
+    if (
+      subjectFilter !== 'all' &&
+      asg.subjectId !== subjectFilter
+    ) return false;
+
+    // Class target check
+    if (
+      asg.targetAudience === 'specific_classes' &&
+      asg.targetClasses &&
+      currentUser?.className
+    ) {
+      if (!asg.targetClasses.includes(currentUser.className)) return false;
+    }
+
+    const sub = submissions.find(
+      (s) => s.assignmentId === asg.id && s.studentUid === studentUid
+    );
+
+    if (statusFilter === 'pending' && sub) return false;
+    if (statusFilter === 'submitted' && (!sub || sub.status !== 'submitted')) return false;
+    if (statusFilter === 'graded' && (!sub || sub.status !== 'graded')) return false;
+
+    return true;
+});
+```
 
     // Class target check
     if (asg.targetAudience === 'specific_classes' && asg.targetClasses && currentUser?.className) {
