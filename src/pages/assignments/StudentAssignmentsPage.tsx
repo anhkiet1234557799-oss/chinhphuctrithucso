@@ -10,7 +10,6 @@ import {
   ArrowRight,
   RotateCcw,
   BookOpen,
-  Filter,
   Search,
   Sparkles,
   HelpCircle,
@@ -62,14 +61,8 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'submitted' | 'graded'>('all');
-  const [subjectFilter, setSubjectFilter] = useState<string>(
-  currentSubject?.id || 'all'
-);
   const [reviewSubmission, setReviewSubmission] = useState<AssignmentSubmission | null>(null);
-  useEffect(() => {
-  if (currentSubject?.id) {
-    setSubjectFilter(currentSubject.id);
-  }
+  useEffect(() => { 
 }, [currentSubject?.id]);
 
   // Student info fallback
@@ -81,7 +74,6 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
   const filteredAssignments = assignments.filter((asg) => {
     if (asg.status !== 'published') return false;
     if (asg.grade !== currentGrade && asg.grade !== currentUser?.grade) return false;
-    if (subjectFilter !== 'all' && asg.subjectId !== subjectFilter) return false;
 
     // Class target check
     if (asg.targetAudience === 'specific_classes' && asg.targetClasses && currentUser?.className) {
