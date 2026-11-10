@@ -1341,18 +1341,40 @@ export const storageService = {
   },
 
   // Assignments
-  getAssignments(): Assignment[] {
-    try {
-      const stored = localStorage.getItem(KEYS.ASSIGNMENTS);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-    } catch {
-      // ignore
-    }
-    this.saveAssignments(INITIAL_ASSIGNMENTS);
+  
+getAssignments(): Assignment[] {
+  const DELETED_KEY = 'myhoa_deleted_default_assignments_v1';
+
+  try {
+    const stored = localStorage.getItem(KEYS.ASSIGNMENTS);
+    const deletedIds: string[] = JSON.parse(
+      localStorage.getItem(DELETED_KEY) || '[]'
+    );
+
+    const currentAssignments: Assignment[] = stored
+      ? JSON.parse(stored)
+      : [];
+
+    const currentIds = new Set(currentAssignments.map(a => a.id));
+
+    // Bổ sung bài tập mặc định còn thiếu, không ghi đè bài đã có.
+    const missingAssignments = INITIAL_ASSIGNMENTS.filter(
+      a => !currentIds.has(a.id) && !deletedIds.includes(a.id)
+    );
+
+    const mergedAssignments = [
+      ...currentAssignments,
+      ...missingAssignments
+    ];
+
+    this.saveAssignments(mergedAssignments);
+    return mergedAssignments;
+  } catch (error) {
+    console.error('Error loading assignments:', error);
     return INITIAL_ASSIGNMENTS;
-  },
+  }
+},
+
 
   saveAssignments(assignments: Assignment[]): void {
     try {
@@ -1377,11 +1399,26 @@ export const storageService = {
     }
   },
 
-  deleteAssignment(id: string): void {
-    const list = this.getAssignments();
-    const filtered = list.filter(a => a.id !== id);
-    this.saveAssignments(filtered);
-  },
+ deleteAssignment(id: string): void {
+  const DELETED_KEY = 'myhoa_deleted_default_assignments_v1';
+
+  const list = this.getAssignments();
+  const filtered = list.filter(a => a.id !== id);
+
+  // Ghi nhớ bài tập mặc định đã bị giáo viên xóa.
+  if (INITIAL_ASSIGNMENTS.some(a => a.id === id)) {
+    const deletedIds: string[] = JSON.parse(
+      localStorage.getItem(DELETED_KEY) || '[]'
+    );
+
+    if (!deletedIds.includes(id)) {
+      deletedIds.push(id);
+      localStorage.setItem(DELETED_KEY, JSON.stringify(deletedIds));
+    }
+  }
+
+  this.saveAssignments(filtered);
+},
 
   // Submissions
   getSubmissions(): AssignmentSubmission[] {
