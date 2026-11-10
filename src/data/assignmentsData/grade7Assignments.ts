@@ -18,7 +18,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-eng-02',
-    teacherName: 'Thầy Lê Hoàng Nam (Tổ Tiếng Anh)',
+    teacherName: 'Tổ Tiếng Anh',
     createdAt: '2026-10-25T08:30:00Z',
     questions: [
       {
@@ -79,7 +79,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-eng-02',
-    teacherName: 'Thầy Lê Hoàng Nam (Tổ Tiếng Anh)',
+    teacherName: 'Tổ Tiếng Anh',
     createdAt: '2026-10-27T09:30:00Z',
     questions: [
       {
@@ -149,7 +149,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-toan-02',
-    teacherName: 'Thầy Nguyễn Văn An (Tổ Toán - Tin)',
+    teacherName: 'Tổ Toán - Tin',
     createdAt: '2026-10-26T14:00:00Z',
     questions: [
       {
@@ -210,7 +210,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-toan-02',
-    teacherName: 'Thầy Nguyễn Văn An (Tổ Toán - Tin)',
+    teacherName: 'Tổ Toán - Tin',
     createdAt: '2026-10-27T15:00:00Z',
     questions: [
       {
@@ -280,7 +280,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-van-02',
-    teacherName: 'Cô Nguyễn Thị Hồng Hạnh (Tổ Ngữ văn)',
+    teacherName: 'Tổ Ngữ văn',
     createdAt: '2026-10-26T11:00:00Z',
     questions: [
       {
@@ -351,7 +351,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-van-02',
-    teacherName: 'Cô Nguyễn Thị Hồng Hạnh (Tổ Ngữ văn)',
+    teacherName: 'Tổ Ngữ văn',
     createdAt: '2026-10-28T10:00:00Z',
     questions: [
       {
@@ -421,7 +421,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-khtn-02',
-    teacherName: 'Thầy Phạm Thanh Tùng (Tổ Hóa - Sinh)',
+    teacherName: 'Tổ KHTN',
     createdAt: '2026-10-26T16:00:00Z',
     questions: [
       {
@@ -482,7 +482,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-khtn-02',
-    teacherName: 'Thầy Phạm Thanh Tùng (Tổ Hóa - Sinh)',
+    teacherName: 'Tổ KHTN',
     createdAt: '2026-10-27T16:30:00Z',
     questions: [
       {
@@ -552,7 +552,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-lsdl-02',
-    teacherName: 'Cô Vũ Bích Ngọc (Tổ Sử - Địa)',
+    teacherName: 'Tổ Sử - Địa',
     createdAt: '2026-10-26T09:00:00Z',
     questions: [
       {
@@ -618,7 +618,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-lsdl-02',
-    teacherName: 'Cô Vũ Bích Ngọc (Tổ Sử - Địa)',
+    teacherName: 'Tổ Sử - Địa',
     createdAt: '2026-10-27T09:00:00Z',
     questions: [
       {
@@ -683,7 +683,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-tin-01',
-    teacherName: 'Cô Trần Thị Mai (Tổ trưởng Tin học)',
+    teacherName: 'Tổ Tin học',
     createdAt: '2026-10-26T13:00:00Z',
     questions: [
       {
@@ -749,7 +749,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-tin-01',
-    teacherName: 'Cô Trần Thị Mai (Tổ trưởng Tin học)',
+    teacherName: 'Tổ Tin học',
     createdAt: '2026-10-28T13:00:00Z',
     questions: [
       {
@@ -814,7 +814,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-gdcd-02',
-    teacherName: 'Cô Lê Thị Kim Yến (Tổ GDCD)',
+    teacherName: 'Tổ GDCD',
     createdAt: '2026-10-27T10:30:00Z',
     questions: [
       {
@@ -885,7 +885,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-gdcd-02',
-    teacherName: 'Cô Lê Thị Kim Yến (Tổ GDCD)',
+    teacherName: 'Tổ GDCD',
     createdAt: '2026-10-29T10:30:00Z',
     questions: [
       {
@@ -960,7 +960,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-cn-02',
-    teacherName: 'Thầy Trần Quốc Toản (Tổ Công nghệ)',
+    teacherName: 'Tổ Công nghệ',
     createdAt: '2026-10-27T11:30:00Z',
     questions: [
       {
@@ -1026,7 +1026,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-cn-02',
-    teacherName: 'Thầy Trần Quốc Toản (Tổ Công nghệ)',
+    teacherName: 'Tổ Công nghệ',
     createdAt: '2026-10-29T11:30:00Z',
     questions: [
       {
@@ -1095,7 +1095,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-nhac-01',
-    teacherName: 'Thầy Nguyễn Văn Trí (Tổ Nghệ thuật)',
+    teacherName: 'Tổ Nghệ thuật',
     createdAt: '2026-10-25T08:30:00Z',
     questions: [
       {
@@ -1165,7 +1165,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-nhac-01',
-    teacherName: 'Thầy Nguyễn Văn Trí (Tổ Nghệ thuật)',
+    teacherName: 'Tổ Nghệ thuật',
     createdAt: '2026-10-26T08:30:00Z',
     questions: [
       {
@@ -1239,7 +1239,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-mt-01',
-    teacherName: 'Cô Trần Ngọc Mai (Tổ Nghệ thuật)',
+    teacherName: 'Tổ Nghệ thuật',
     createdAt: '2026-10-27T08:30:00Z',
     questions: [
       {
@@ -1310,7 +1310,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-mt-01',
-    teacherName: 'Cô Trần Ngọc Mai (Tổ Nghệ thuật)',
+    teacherName: 'Tổ Nghệ thuật',
     createdAt: '2026-10-28T08:30:00Z',
     questions: [
       {
@@ -1384,7 +1384,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-gdtc-01',
-    teacherName: 'Thầy Lê Hoàng Nam (Tổ Thể dục)',
+    teacherName: 'GDTC',
     createdAt: '2026-10-25T10:15:00Z',
     questions: [
       {
@@ -1455,7 +1455,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-gdtc-01',
-    teacherName: 'Thầy Lê Hoàng Nam (Tổ Thể dục)',
+    teacherName: 'GDTC',
     createdAt: '2026-10-26T10:15:00Z',
     questions: [
       {
@@ -1529,7 +1529,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-hdtn-01',
-    teacherName: 'Cô Bùi Thị Lan (Tổ Hoạt động Trải nghiệm)',
+    teacherName: 'Tổ Hoạt động Trải nghiệm',
     createdAt: '2026-10-25T10:45:00Z',
     questions: [
       {
@@ -1600,7 +1600,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-hdtn-01',
-    teacherName: 'Cô Bùi Thị Lan (Tổ Hoạt động Trải nghiệm)',
+    teacherName: 'Tổ Hoạt động Trải nghiệm',
     createdAt: '2026-10-26T10:45:00Z',
     questions: [
       {
@@ -1674,7 +1674,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-gddp-01',
-    teacherName: 'Thầy Đặng Quốc Việt (Tổ KH Xã hội)',
+    teacherName: 'Tổ Ngữ văn',
     createdAt: '2026-10-25T11:15:00Z',
     questions: [
       {
@@ -1745,7 +1745,7 @@ export const GRADE_7_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-gddp-01',
-    teacherName: 'Thầy Đặng Quốc Việt (Tổ KH Xã hội)',
+    teacherName: 'Tổ Ngữ văn',
     createdAt: '2026-10-26T11:15:00Z',
     questions: [
       {
