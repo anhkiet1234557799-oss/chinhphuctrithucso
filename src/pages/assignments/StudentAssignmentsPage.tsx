@@ -111,23 +111,6 @@ const filteredAssignments = assignments.filter((asg) => {
 });
 ```
 
-    // Class target check
-    if (asg.targetAudience === 'specific_classes' && asg.targetClasses && currentUser?.className) {
-      if (!asg.targetClasses.includes(currentUser.className)) return false;
-      if (asg.grade !== currentGrade && asg.grade !== currentUser?.grade) return false;
-    }
-
-    const sub = submissions.find(
-      (s) => s.assignmentId === asg.id && s.studentUid === studentUid
-    );
-
-    if (statusFilter === 'pending' && sub) return false;
-    if (statusFilter === 'submitted' && (!sub || sub.status !== 'submitted')) return false;
-    if (statusFilter === 'graded' && (!sub || sub.status !== 'graded')) return false;
-
-    return true;
-  });
-
   // Load draft answers from localStorage when starting an assignment
   const startAssignment = (asg: Assignment) => {
     setSelectedAssignment(asg);
