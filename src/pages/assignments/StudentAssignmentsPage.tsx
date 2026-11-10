@@ -105,6 +105,21 @@ export const StudentAssignmentsPage: React.FC<StudentAssignmentsPageProps> = ({
     return s;
   };
 
+  
+  // Đồng bộ môn học từ thanh điều hướng phía trên
+  useEffect(() => {
+    const activeSubjectId = currentSubject?.id
+      ? String(currentSubject.id)
+      : 'all';
+
+    setSubjectFilter(
+      !activeSubjectId || activeSubjectId === 'all'
+        ? 'all'
+        : activeSubjectId
+    );
+  }, [currentSubject?.id]);
+
+
   // Student info fallback
   const studentUid = currentUser?.uid || 'u-student-guest';
   const studentName = currentUser?.displayName ? currentUser.displayName.replace(/THCS Mỹ Hòa\s*[-–•]?\s*/gi, '').trim() : 'Học sinh';
