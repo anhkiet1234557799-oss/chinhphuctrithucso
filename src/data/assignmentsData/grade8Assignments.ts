@@ -275,7 +275,7 @@ export const GRADE_8_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-van-03',
-    teacherName: 'Ngữ văn',
+    teacherName: 'Tổ Ngữ văn',
     createdAt: '2026-10-26T11:30:00Z',
     questions: [
       {
@@ -346,7 +346,7 @@ export const GRADE_8_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-van-03',
-    teacherName: 'Ngữ văn',
+    teacherName: 'Tổ Ngữ văn',
     createdAt: '2026-10-28T10:30:00Z',
     questions: [
       {
@@ -552,7 +552,7 @@ export const GRADE_8_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-lsdl-03',
-    teacherName: 'Thầy Nguyễn Trọng Nghĩa (Tổ Sử - Địa)',
+    teacherName: 'Tổ Sử - Địa',
     createdAt: '2026-10-26T09:30:00Z',
     questions: [
       {
@@ -683,7 +683,7 @@ export const GRADE_8_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-tin-02',
-    teacherName: 'Thầy Mai Tuấn Anh (Tổ Tin học)',
+    teacherName: 'Tổ Tin học',
     createdAt: '2026-10-26T13:30:00Z',
     questions: [
       {
@@ -955,7 +955,7 @@ export const GRADE_8_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-cn-03',
-    teacherName: 'Tổ Công ngh)',
+    teacherName: 'Tổ Công nghệ',
     createdAt: '2026-10-27T11:00:00Z',
     questions: [
       {
@@ -1021,7 +1021,7 @@ export const GRADE_8_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-cn-03',
-    teacherName: 'Cô Đặng Thị Thu Trang (Tổ Công nghệ)',
+    teacherName: 'Tổ Công nghệ',
     createdAt: '2026-10-29T11:00:00Z',
     questions: [
       {
