@@ -1316,7 +1316,7 @@ export const GRADE_9_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-mt-01',
-    teacherName: 'CTổ Nghệ thuật',
+    teacherName: 'Tổ Nghệ thuật',
     createdAt: '2026-10-28T09:30:00Z',
     questions: [
       {
