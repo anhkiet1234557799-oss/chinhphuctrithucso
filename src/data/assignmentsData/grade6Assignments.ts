@@ -275,7 +275,7 @@ export const GRADE_6_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-van-01',
-    teacherName: 'Cô Lê Thị Thu Thủy (Tổ Ngữ văn)',
+    teacherName: 'Tổ Ngữ văn',
     createdAt: '2026-10-25T11:00:00Z',
     questions: [
       {
@@ -421,7 +421,7 @@ export const GRADE_6_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-khtn-01',
-    teacherName: 'Tổ Tự nhiên',
+    teacherName: 'Tổ KHTN',
     createdAt: '2026-10-26T15:00:00Z',
     questions: [
       {
@@ -482,7 +482,7 @@ export const GRADE_6_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-khtn-01',
-    teacherName: 'Tổ Tự nhiên',
+    teacherName: 'Tổ KHTN',
     createdAt: '2026-10-27T16:00:00Z',
     questions: [
       {
@@ -1395,7 +1395,7 @@ export const GRADE_6_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-gdtc-01',
-    teacherName: 'Tổ Thể dục',
+    teacherName: 'Tổ GDTC',
     createdAt: '2026-10-25T10:00:00Z',
     questions: [
       {
@@ -1466,7 +1466,7 @@ export const GRADE_6_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-gdtc-01',
-    teacherName: 'Tổ Thể dục',
+    teacherName: 'Tổ GDTC',
     createdAt: '2026-10-26T10:00:00Z',
     questions: [
       {
@@ -1540,7 +1540,7 @@ export const GRADE_6_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-hdtn-01',
-    teacherName: 'Cô Bùi Thị Lan (Tổ Hoạt động Trải nghiệm)',
+    teacherName: 'Tổ Hoạt động Trải nghiệm',
     createdAt: '2026-10-25T10:30:00Z',
     questions: [
       {
@@ -1756,7 +1756,7 @@ export const GRADE_6_ASSIGNMENTS: Assignment[] = [
     status: 'published',
     targetAudience: 'all_grade',
     teacherId: 'u-teacher-gddp-01',
-    teacherName: 'Thầy Đặng Quốc Việt (Tổ KH Xã hội)',
+    teacherName: 'Tổ Ngữ văn',
     createdAt: '2026-10-26T11:00:00Z',
     questions: [
       {
