@@ -30,7 +30,7 @@ import { AboutModal } from './components/modals/AboutModal';
 // Pages
 import { HomePage } from './pages/home/HomePage';
 import { StudentTextbooksPage } from './pages/textbooks/StudentTextbooksPage';
-import { StudentVideosPage } from './pages/videos/StudentVideosPage';
+import { StudentVideosPage } from './pages/StudentVideosPage';
 import { KnowledgePage } from './pages/knowledge/KnowledgePage';
 import { PracticePage } from './pages/practice/PracticePage';
 import { GamesPage } from './pages/games/GamesPage';
