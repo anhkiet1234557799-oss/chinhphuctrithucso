@@ -11,7 +11,8 @@ import {
   Assignment,
   AssignmentSubmission,
   Textbook,
-  SubjectMeta
+  SubjectMeta,
+  EducationalVideo
 } from './types';
 import { SUBJECTS, INITIAL_ANNOUNCEMENTS, TeacherDocument } from './data/mockData';
 import { storageService } from './services/storageService';
@@ -29,6 +30,7 @@ import { AboutModal } from './components/modals/AboutModal';
 // Pages
 import { HomePage } from './pages/home/HomePage';
 import { StudentTextbooksPage } from './pages/textbooks/StudentTextbooksPage';
+import { StudentVideosPage } from './pages/videos/StudentVideosPage';
 import { KnowledgePage } from './pages/knowledge/KnowledgePage';
 import { PracticePage } from './pages/practice/PracticePage';
 import { GamesPage } from './pages/games/GamesPage';
@@ -147,6 +149,7 @@ export function App() {
   const [assignments, setAssignments] = useState<Assignment[]>(() => storageService.getAssignments());
   const [submissions, setSubmissions] = useState<AssignmentSubmission[]>(() => storageService.getSubmissions());
   const [textbooks, setTextbooks] = useState<Textbook[]>(() => storageService.getTextbooks());
+  const [educationalVideos, setEducationalVideos] = useState<EducationalVideo[]>(() => storageService.getVideos());
 
   // Initial push to navigation history
   useEffect(() => {
@@ -205,7 +208,7 @@ export function App() {
     }
   };
 
-  // Permanent Firestore sync on load for persistent textbooks across all sessions/devices
+  // Permanent Firestore sync on load for persistent textbooks and assignments across all sessions/devices
   useEffect(() => {
     storageService.loadTextbooksFromFirestoreOrServer().then((synced) => {
       if (synced && synced.length > 0) {
@@ -213,6 +216,30 @@ export function App() {
       }
     }).catch((err) => {
       console.warn('[App] Initial Firestore sync notice:', err);
+    });
+
+    storageService.loadAssignmentsFromFirestoreOrServer().then((synced) => {
+      if (synced && synced.length > 0) {
+        setAssignments(synced);
+      }
+    }).catch((err) => {
+      console.warn('[App] Initial Firestore assignments sync notice:', err);
+    });
+
+    storageService.loadSubmissionsFromFirestoreOrServer().then((synced) => {
+      if (synced && synced.length > 0) {
+        setSubmissions(synced);
+      }
+    }).catch((err) => {
+      console.warn('[App] Initial Firestore submissions sync notice:', err);
+    });
+
+    storageService.loadVideosFromFirestoreOrServer().then((synced) => {
+      if (synced && synced.length > 0) {
+        setEducationalVideos(synced);
+      }
+    }).catch((err) => {
+      console.warn('[App] Initial Firestore videos sync notice:', err);
     });
   }, []);
 
@@ -412,6 +439,44 @@ export function App() {
     setTextbooks(storageService.getTextbooks());
   };
 
+  // Educational Video Handlers - Awaits Firestore / Express persistence
+  const handleAddVideo = async (video: EducationalVideo): Promise<EducationalVideo> => {
+    const saved = await storageService.saveOrUpdateVideo(video);
+    setEducationalVideos(storageService.getVideos());
+    return saved;
+  };
+
+  const handleUpdateVideo = async (video: EducationalVideo): Promise<EducationalVideo> => {
+    const saved = await storageService.saveOrUpdateVideo(video);
+    setEducationalVideos(storageService.getVideos());
+    return saved;
+  };
+
+  const handleTrashVideo = async (id: string): Promise<void> => {
+    await storageService.trashVideo(id);
+    setEducationalVideos(storageService.getVideos());
+  };
+
+  const handleRestoreVideo = async (id: string): Promise<void> => {
+    await storageService.restoreVideo(id);
+    setEducationalVideos(storageService.getVideos());
+  };
+
+  const handlePermanentDeleteVideo = async (id: string): Promise<void> => {
+    await storageService.permanentDeleteVideo(id);
+    setEducationalVideos(storageService.getVideos());
+  };
+
+  const handleEmptyVideoTrash = async (): Promise<void> => {
+    await storageService.emptyVideoTrash();
+    setEducationalVideos(storageService.getVideos());
+  };
+
+  const handleToggleVideoStatus = async (id: string): Promise<void> => {
+    await storageService.toggleVideoStatus(id);
+    setEducationalVideos(storageService.getVideos());
+  };
+
   // Reset all data handler
   const handleResetData = () => {
     storageService.resetAllData();
@@ -425,6 +490,7 @@ export function App() {
     setAssignments(storageService.getAssignments());
     setSubmissions(storageService.getSubmissions());
     setTextbooks(storageService.getTextbooks());
+    setEducationalVideos(storageService.getVideos());
   };
 
   // Global real calculated statistics
@@ -532,6 +598,17 @@ export function App() {
             />
           )}
 
+          {/* THƯ VIỆN VIDEO BÀI GIẢNG KHÔNG WATERMARK */}
+          {activeTab === 'videos' && (
+            <StudentVideosPage
+              videos={educationalVideos}
+              currentGrade={currentGrade}
+              currentSubject={currentSubjectObj}
+              onOpenDrawer={() => setIsDrawerOpen(true)}
+              onBackToHome={handleGlobalGoBack}
+            />
+          )}
+
           {activeTab === 'assignments' && (
             <StudentAssignmentsPage
               currentGrade={currentGrade}
@@ -543,6 +620,7 @@ export function App() {
               onOpenLogin={() => setIsLoginModalOpen(true)}
               onOpenDrawer={() => setIsDrawerOpen(true)}
               onBackToHome={handleGlobalGoBack}
+              onSelectGrade={(g) => setCurrentGrade(g)}
             />
           )}
 
@@ -552,6 +630,8 @@ export function App() {
               subject={currentSubjectObj}
               lessons={lessons}
               mediaList={mediaList}
+              educationalVideos={educationalVideos}
+              onOpenVideosPage={() => handleNavigateTab('videos')}
               onOpenDrawer={() => setIsDrawerOpen(true)}
               selectedLesson={selectedLesson}
               onSelectLesson={setSelectedLesson}
@@ -661,6 +741,14 @@ export function App() {
                 onUpdateTextbook={handleUpdateTextbook}
                 onDeleteTextbook={handleDeleteTextbook}
                 onToggleTextbookStatus={handleToggleTextbookStatus}
+                educationalVideos={educationalVideos}
+                onAddVideo={handleAddVideo}
+                onUpdateVideo={handleUpdateVideo}
+                onTrashVideo={handleTrashVideo}
+                onRestoreVideo={handleRestoreVideo}
+                onPermanentDeleteVideo={handlePermanentDeleteVideo}
+                onEmptyVideoTrash={handleEmptyVideoTrash}
+                onToggleVideoStatus={handleToggleVideoStatus}
                 onLogout={handleLogout}
                 currentGrade={currentGrade}
                 currentSubject={currentSubjectObj}
@@ -764,5 +852,4 @@ export function App() {
     </div>
   );
 }
-
 export default App;
