@@ -1,6 +1,4 @@
-
 import React, { useEffect, useMemo, useState } from "react";
-
 type VideoItem = {
   id: string;
   title: string;
@@ -11,7 +9,6 @@ type VideoItem = {
   uploadTime: string;
   [key: string]: any;
 };
-
 type StudentVideosPageProps = {
   mediaList?: VideoItem[];
   videos?: VideoItem[];
@@ -23,9 +20,7 @@ type StudentVideosPageProps = {
   onDeleteVideo?: (id: string) => void;
   [key: string]: any;
 };
-
 const STORAGE_KEY = "thcs_my_hoa_student_videos";
-
 const emptyForm = {
   title: "",
   url: "",
@@ -34,7 +29,6 @@ const emptyForm = {
   originalVideo: "",
   uploadTime: new Date().toISOString().slice(0, 10),
 };
-
 function createId() {
   return `video_${Date.now()}_${Math.random()
     .toString(36)
@@ -96,7 +90,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
     setError("");
     setShowForm(false);
   };
-
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -106,7 +99,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
       [name]: value,
     }));
   };
-
   const handleEdit = (video: VideoItem) => {
     setForm({
       title: video.title ?? "",
@@ -120,7 +112,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
     setShowForm(true);
     setError("");
   };
-
   const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
@@ -129,17 +120,19 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
       setError("Vui lòng nhập tên bài giảng.");
       return;
     }
-
     if (!isValidUrl(form.url.trim())) {
-      setError("Đường link video không hợp lệ. Hãy nhập link HTTP hoặc HTTPS.");
+      setError(
+        "Đường link video không hợp lệ. Hãy nhập link HTTP hoặc HTTPS."
+      );
       return;
     }
-
-    if (form.originalVideo.trim() && !isValidUrl(form.originalVideo.trim())) {
+    if (
+      form.originalVideo.trim() &&
+      !isValidUrl(form.originalVideo.trim())
+    ) {
       setError("Link video gốc không hợp lệ.");
       return;
     }
-
     const item: VideoItem = {
       id: editingId ?? createId(),
       title: form.title.trim(),
@@ -149,7 +142,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
       originalVideo: form.originalVideo.trim(),
       uploadTime: form.uploadTime,
     };
-
     if (editingId) {
       if (props.onUpdateMedia) {
         props.onUpdateMedia(item);
@@ -171,15 +163,12 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
         updateLocal([item, ...localVideos]);
       }
     }
-
     resetForm();
   };
-
   const handleDelete = (id: string) => {
     const confirmed = window.confirm(
       "Bạn có chắc chắn muốn xóa bài giảng này không?"
     );
-
     if (!confirmed) return;
 
     if (props.onDeleteMedia) {
@@ -189,22 +178,18 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
     } else {
       updateLocal(localVideos.filter((video) => video.id !== id));
     }
-
     if (editingId === id) {
       resetForm();
     }
   };
-
   const filteredVideos = videos.filter((video) => {
     const keyword = search.toLowerCase();
-
     return (
       (video.title ?? "").toLowerCase().includes(keyword) ||
       (video.author ?? "").toLowerCase().includes(keyword) ||
       (video.source ?? "").toLowerCase().includes(keyword)
     );
   });
-
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-6 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-6">
@@ -221,7 +206,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                 Kho học liệu video phục vụ dạy và học trực tuyến.
               </p>
             </div>
-
             <button
               type="button"
               onClick={() => {
@@ -239,7 +223,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
             </button>
           </div>
         </header>
-
         <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -250,7 +233,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                 Tổng số: {videos.length} video
               </p>
             </div>
-
             <input
               type="search"
               value={search}
@@ -260,14 +242,14 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
             />
           </div>
         </section>
-
         {showForm && (
           <section className="rounded-2xl border border-blue-200 bg-white p-5 shadow-md sm:p-7">
             <div className="mb-5 flex items-center justify-between gap-3">
               <h2 className="text-xl font-bold text-slate-800">
-                {editingId ? "CHỈNH SỬA BÀI GIẢNG" : "THÊM VIDEO BÀI GIẢNG"}
+                {editingId
+                  ? "CHỈNH SỬA BÀI GIẢNG"
+                  : "THÊM VIDEO BÀI GIẢNG"}
               </h2>
-
               <button
                 type="button"
                 onClick={resetForm}
@@ -276,8 +258,10 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                 Đóng ✕
               </button>
             </div>
-
-            <form onSubmit={handleSave} className="grid gap-4 sm:grid-cols-2">
+            <form
+              onSubmit={handleSave}
+              className="grid gap-4 sm:grid-cols-2"
+            >
               <label className="space-y-2 sm:col-span-2">
                 <span className="text-sm font-semibold text-slate-700">
                   Tên bài giảng *
@@ -291,7 +275,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </label>
-
               <label className="space-y-2 sm:col-span-2">
                 <span className="text-sm font-semibold text-slate-700">
                   Nhập link video *
@@ -306,7 +289,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </label>
-
               <label className="space-y-2">
                 <span className="text-sm font-semibold text-slate-700">
                   Nguồn video
@@ -319,7 +301,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </label>
-
               <label className="space-y-2">
                 <span className="text-sm font-semibold text-slate-700">
                   Tên tác giả
@@ -332,7 +313,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </label>
-
               <label className="space-y-2 sm:col-span-2">
                 <span className="text-sm font-semibold text-slate-700">
                   Video gốc (link nguồn ban đầu)
@@ -346,11 +326,11 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </label>
-
               <label className="space-y-2">
                 <span className="text-sm font-semibold text-slate-700">
                   Thời gian đăng tải
                 </span>
+
                 <input
                   name="uploadTime"
                   type="date"
@@ -359,7 +339,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </label>
-
               {error && (
                 <p className="rounded-xl bg-red-50 p-3 text-sm font-medium text-red-700 sm:col-span-2">
                   {error}
@@ -407,10 +386,10 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                   </span>
                 </div>
               </div>
-
               <div className="space-y-3 p-5 text-sm text-slate-600">
                 <p>
-                  <strong>Nguồn:</strong> {video.source || "Chưa cập nhật"}
+                  <strong>Nguồn:</strong>{" "}
+                  {video.source || "Chưa cập nhật"}
                 </p>
                 <p>
                   <strong>Thời gian đăng tải:</strong>{" "}
@@ -427,7 +406,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                     Mở video bài giảng
                   </a>
                 </p>
-
                 {video.originalVideo && (
                   <p className="break-all">
                     <strong>Video gốc:</strong>{" "}
@@ -441,7 +419,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                     </a>
                   </p>
                 )}
-
                 <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-4">
                   <button
                     type="button"
@@ -450,7 +427,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
                   >
                     Chỉnh sửa
                   </button>
-
                   <button
                     type="button"
                     onClick={() => handleDelete(video.id)}
@@ -463,7 +439,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
             </article>
           ))}
         </section>
-
         {filteredVideos.length === 0 && (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-12 text-center">
             <p className="text-lg font-bold text-slate-700">
@@ -474,7 +449,6 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
             </p>
           </div>
         )}
-
         <footer className="pb-6 text-center text-xs text-slate-400">
           CHINH PHỤC TRI THỨC SỐ
         </footer>
@@ -482,5 +456,4 @@ export function StudentVideosPage(props: StudentVideosPageProps = {}) {
     </main>
   );
 }
-
 export default StudentVideosPage;
