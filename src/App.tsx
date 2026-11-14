@@ -149,7 +149,7 @@ export function App() {
   const [assignments, setAssignments] = useState<Assignment[]>(() => storageService.getAssignments());
   const [submissions, setSubmissions] = useState<AssignmentSubmission[]>(() => storageService.getSubmissions());
   const [textbooks, setTextbooks] = useState<Textbook[]>(() => storageService.getTextbooks());
-  const [educationalVideos, setEducationalVideos] = useState<EducationalVideo[]>(() => storageService.getVideos());
+  const [educationalVideos, setEducationalVideos] = useState<EducationalVideo[]>([]);
 
   // Initial push to navigation history
   useEffect(() => {
@@ -234,13 +234,6 @@ export function App() {
       console.warn('[App] Initial Firestore submissions sync notice:', err);
     });
 
-    storageService.loadVideosFromFirestoreOrServer().then((synced) => {
-      if (synced && synced.length > 0) {
-        setEducationalVideos(synced);
-      }
-    }).catch((err) => {
-      console.warn('[App] Initial Firestore videos sync notice:', err);
-    });
   }, []);
 
   // Selected lesson for detail modal
