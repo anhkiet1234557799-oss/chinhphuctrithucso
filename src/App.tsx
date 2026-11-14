@@ -217,23 +217,7 @@ export function App() {
     }).catch((err) => {
       console.warn('[App] Initial Firestore sync notice:', err);
     });
-
-    storageService.loadAssignmentsFromFirestoreOrServer().then((synced) => {
-      if (synced && synced.length > 0) {
-        setAssignments(synced);
-      }
-    }).catch((err) => {
-      console.warn('[App] Initial Firestore assignments sync notice:', err);
-    });
-
-    storageService.loadSubmissionsFromFirestoreOrServer().then((synced) => {
-      if (synced && synced.length > 0) {
-        setSubmissions(synced);
-      }
-    }).catch((err) => {
-      console.warn('[App] Initial Firestore submissions sync notice:', err);
-    });
-
+ 
   }, []);
 
   // Selected lesson for detail modal
